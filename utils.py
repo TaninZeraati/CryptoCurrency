@@ -72,6 +72,14 @@ def create_signed_transaction(txin, txout, txin_scriptPubKey,
                  tx, 0, (SCRIPT_VERIFY_P2SH,))
     return tx
 
+def create_prime_transaction(txin, txout, txin_scriptPubKey,
+                              txin_scriptSig):
+    tx = CMutableTransaction([txin], [txout])
+    txin.scriptSig = CScript(txin_scriptSig)
+    VerifyScript(txin.scriptSig, CScript(txin_scriptPubKey),
+                 tx, 0, (SCRIPT_VERIFY_P2SH,))
+    return tx
+
 def create_transaction_with_witness(txin, txout, txin_witness):
     tx = CMutableTransaction([txin], [txout])
     ctxinwitnesses = [CTxInWitness(CScriptWitness(txin_witness))]
